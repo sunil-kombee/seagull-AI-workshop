@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 interface PageHeaderProps {
   title: string;
@@ -6,11 +6,17 @@ interface PageHeaderProps {
   className?: string;
 }
 
-export default function PageHeader({ title, description, className }: PageHeaderProps) {
+export default function PageHeader({
+  title,
+  description,
+  className,
+}: PageHeaderProps) {
   return (
     <div className={`mb-8 pb-4 border-b border-border ${className}`}>
-      <h1 className="text-4xl font-bold font-headline text-primary">{title}</h1>
-      {description && <p className="mt-2 text-lg text-muted-foreground">{description}</p>}
+      <h1 className="text-4xl font-bold  text-primary">{title}</h1>
+      {description && (
+        <p className="mt-2 text-lg text-muted-foreground">{description}</p>
+      )}
     </div>
   );
 }
