@@ -1,0 +1,69 @@
+"use client";
+
+import Image from 'next/image';
+import type { CartItem } from '@/contexts/CartContext';
+import { useCart } from '@/contexts/CartContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Minus, Plus, X } from 'lucide-react';
+import Link from 'next/link';
+
+interface CartItemCardProps {
+  item: CartItem;
+}
+
+export default function CartItemCard({ item }: CartItemCardProps) {
+  const { removeFromCart, updateQuantity } = useCart();
+
+  const handleQuantityChange = (newQuantity: number) => {
+    updateQuantity(item.id, newQuantity);
+  };
+
+  return (
+    <div className="flex items-start space-x-4 p-4 border border-border rounded-lg shadow-sm bg-card mb-4">
+      <Link href={`/services/${item.id}`} className="shrink-0">
+        <Image
+          src={item.image}
+          alt={item.name}
+          width={100}
+          height={100}
+          className="rounded-md object-cover aspect-square"
+          data-ai-hint={item.dataAiHint}
+        />
+      </Link>
+      <div className="flex-grow">
+        <Link href={`/services/${item.id}`}>
+         <h3 className="text-lg font-semibold font-headline text-foreground hover:text-primary transition-colors">{item.name}</h3>
+        </Link>
+        <p className="text-sm text-muted-foreground">{item.category}</p>
+        <p className="text-lg font-medium text-primary mt-1">
+          {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency }).format(item.price)}
+        </p>
+        <div className="flex items-center space-x-2 mt-2">
+          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleQuantityChange(item.quantity - 1)} disabled={item.quantity <= 1}>
+            <Minus className="h-4 w-4" />
+          </Button>
+          <Input 
+            type="number" 
+            className="h-8 w-12 text-center px-0" 
+            value={item.quantity} 
+            onChange={(e) => handleQuantityChange(parseInt(e.target.value, 10))}
+            min="1"
+          />
+          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleQuantityChange(item.quantity + 1)}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      <div className="flex flex-col items-end justify-between h-full">
+         <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)} className="text-muted-foreground hover:text-destructive">
+          <X className="h-5 w-5" />
+          <span className="sr-only">Remove item</span>
+        </Button>
+        <p className="text-lg font-semibold text-foreground mt-auto">
+          {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency }).format(item.price * item.quantity)}
+        </p>
+      </div>
+    </div>
+  );
+}
