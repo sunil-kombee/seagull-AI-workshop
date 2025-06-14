@@ -1,40 +1,28 @@
-"use client"; // Needs to be client for useCart and useState
-
 import Image from 'next/image';
-import { useParams } from 'next/navigation'; // Use this if on older Next versions or if needed
-// For Next.js 13+ App Router, params are passed as props to the page component.
-import { getServiceById, mockServices, Service } from '@/data/services';
+import { headers } from 'next/headers';
+import { Service } from '@/data/services';
 import MainLayout from '@/components/layout/MainLayout';
 import PageHeader from '@/components/ui/PageHeader';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/contexts/CartContext';
-import { useState, useEffect } from 'react';
 import { Minus, Plus, ShoppingCart, Star, Users, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import ServiceCard from '@/components/services/ServiceCard';
+import { getServerSideServiceData } from './service-data';
+import { ServicePurchaseForm } from '@/components/services/ServicePurchaseForm';
 
+export async function generateStaticParams() {
+  const services = await import('@/data/services').then(mod => mod.mockServices);
+  return services.map(service => ({
+    id: service.id.toString()
+  }));
+}
 
-export default function ServiceDetailPage({ params }: { params: { id: string } }) {
-  const { addToCart } = useCart();
-  const [service, setService] = useState<Service | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [relatedServices, setRelatedServices] = useState<Service[]>([]);
-
-  useEffect(() => {
-    if (params.id) {
-      const foundService = getServiceById(params.id as string);
-      if (foundService) {
-        setService(foundService);
-        // Load related services (simple example: other services in same category)
-        const related = mockServices.filter(s => s.category === foundService.category && s.id !== foundService.id).slice(0, 3);
-        setRelatedServices(related);
-      }
-    }
-  }, [params.id]);
-
-  if (!service) {
+export default async function ServiceDetailPage({ params }: { params: { id: string } }) {
+  const data = await getServerSideServiceData(params.id);
+  
+  if (!data?.service) {
     return (
       <MainLayout>
         <div className="text-center py-10">
@@ -50,9 +38,7 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
     );
   }
 
-  const handleAddToCart = () => {
-    addToCart(service, quantity);
-  };
+  const { service, relatedServices = [] } = data;
 
   return (
     <MainLayout>
@@ -69,12 +55,12 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
             <Image
               src={service.image}
               alt={service.name}
-              layout="fill"
+              fill
               style={{
                 objectFit: 'cover',
                 objectPosition: 'center',
               }}
-              data-ai-hint={service.dataAiHint}
+              priority
               className="transition-transform duration-500 hover:scale-105"
             />
           </div>
@@ -98,28 +84,7 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
             {new Intl.NumberFormat('en-US', { style: 'currency', currency: service.currency }).format(service.price)}
           </p>
 
-          <p className="text-foreground/80 leading-relaxed text-base">
-            {service.longDescription || service.description}
-          </p>
-
-          <Separator />
-          
-          <div className="flex items-center space-x-4">
-            <p className="font-medium text-foreground">Quantity:</p>
-            <div className="flex items-center border border-border rounded-md">
-              <Button variant="ghost" size="icon" onClick={() => setQuantity(q => Math.max(1, q - 1))} className="rounded-r-none">
-                <Minus className="h-4 w-4" />
-              </Button>
-              <span className="px-4 w-12 text-center font-medium">{quantity}</span>
-              <Button variant="ghost" size="icon" onClick={() => setQuantity(q => q + 1)} className="rounded-l-none">
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          <Button size="lg" className="w-full text-lg py-6 shadow-md hover:shadow-lg transition-shadow" onClick={handleAddToCart}>
-            <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
-          </Button>
+          <ServicePurchaseForm service={service} />
         </div>
       </div>
       

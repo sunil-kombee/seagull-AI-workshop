@@ -6,6 +6,7 @@ import PageHeader from '@/components/ui/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { serviceCategories } from '@/data/services';
 import { CheckCircle, MapPin, Users, Zap } from 'lucide-react';
+import { images } from '@/data/images';
 
 export default function HomePage() {
   const whyChooseUsItems = [
@@ -21,15 +22,14 @@ export default function HomePage() {
         className="relative bg-gradient-to-r from-primary/70 to-accent/70 text-white py-20 md:py-32 rounded-lg shadow-xl overflow-hidden mb-16"
       >
         <Image 
-          src="https://placehold.co/1920x1080.png" 
-          alt="Travel background" 
-          layout="fill" 
+          src={images.hero.url} 
+          alt={images.hero.alt} 
+          fill
           style={{
             objectFit: 'cover',
             objectPosition: 'center',
           }}
           className="absolute z-0 opacity-30" 
-          data-ai-hint="travel landscape"
           priority
         />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
@@ -60,8 +60,14 @@ export default function HomePage() {
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <p className="text-muted-foreground text-sm">Click to explore {category.name.toLowerCase()} options.</p>
-                  <div data-ai-hint={category.dataAiHint} className="mt-4">
-                     <Image src={`https://placehold.co/300x200.png`} alt={category.name} width={300} height={200} className="rounded-md object-cover aspect-[3/2]" />
+                  <div className="mt-4">
+                    <Image 
+                      src={images.categories[category.slug].url}
+                      alt={images.categories[category.slug].alt}
+                      width={300}
+                      height={200}
+                      className="rounded-md object-cover aspect-[3/2]"
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -87,15 +93,14 @@ export default function HomePage() {
       {/* Call to Action Section */}
       <section className="text-center py-16 bg-gradient-to-r from-accent/70 to-primary/70 text-white rounded-lg shadow-xl">
          <Image 
-          src="https://placehold.co/1200x400.png" 
-          alt="CTA background" 
-          layout="fill" 
+          src={images.cta.url}
+          alt={images.cta.alt}
+          fill
           style={{
             objectFit: 'cover',
             objectPosition: 'center',
           }}
           className="absolute z-0 opacity-20 rounded-lg" 
-          data-ai-hint="happy travelers"
         />
         <div className="relative z-10">
           <h2 className="text-4xl font-bold font-headline mb-6">Ready to Plan Your Trip?</h2>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { ShoppingCart, UserCircle2, Menu, X } from 'lucide-react';
+import { useAuthStore } from '@/store/auth-store';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/common/Logo';
 import { useCart } from '@/contexts/CartContext';
@@ -18,16 +19,17 @@ export default function Navbar() {
   const { getItemCount, setIsCartOpen } = useCart();
   const [itemCount, setItemCount] = useState(0);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     setItemCount(getItemCount());
-  }, [getItemCount, getItemCount()]);
+  }, [getItemCount]);
 
 
   const navItems = [
     { href: '/', label: 'Home' },
     { href: '/services', label: 'Services' },
-    { href: '/dashboard', label: 'Dashboard' }, // Assuming a dashboard for logged-in users
+    ...(user?.isAuthenticated ? [{ href: '/dashboard', label: 'Dashboard' }] : []),
   ];
 
   return (
@@ -47,11 +49,19 @@ export default function Navbar() {
                 </span>
               )}
             </Button>
-            <Link href="/login" passHref>
-              <Button variant="outline" size="icon" className="hidden md:inline-flex" aria-label="Login or Profile">
-                <UserCircle2 className="h-6 w-6 text-foreground" />
-              </Button>
-            </Link>
+            {user?.isAuthenticated ? (
+              <Link href="/dashboard" passHref>
+                <Button variant="outline" size="icon" className="hidden md:inline-flex" aria-label="Profile">
+                  <UserCircle2 className="h-6 w-6 text-foreground" />
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/login" passHref>
+                <Button variant="outline" size="icon" className="hidden md:inline-flex" aria-label="Login">
+                  <UserCircle2 className="h-6 w-6 text-foreground" />
+                </Button>
+              </Link>
+            )}
             <div className="md:hidden">
               <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetTrigger asChild>
@@ -75,9 +85,15 @@ export default function Navbar() {
                           <NavLink href={item.href} onClick={() => setIsSheetOpen(false)}>{item.label}</NavLink>
                         </SheetClose>
                       ))}
-                      <SheetClose asChild>
-                        <NavLink href="/login" onClick={() => setIsSheetOpen(false)}>Login / Register</NavLink>
-                      </SheetClose>
+                      {user?.isAuthenticated ? (
+                        <SheetClose asChild>
+                          <NavLink href="/dashboard" onClick={() => setIsSheetOpen(false)}>Profile</NavLink>
+                        </SheetClose>
+                      ) : (
+                        <SheetClose asChild>
+                          <NavLink href="/login" onClick={() => setIsSheetOpen(false)}>Login / Register</NavLink>
+                        </SheetClose>
+                      )}
                     </nav>
                   </div>
                 </SheetContent>

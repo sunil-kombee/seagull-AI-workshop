@@ -1,10 +1,10 @@
 import AuthLayout from "@/components/layout/AuthLayout";
-import RegistrationForm from "@/components/auth/RegistrationForm";
+import AuthForm from "@/components/auth/AuthForm";
 
 export default function RegisterPage() {
   return (
     <AuthLayout title="Create Your Account">
-      <RegistrationForm />
+      <AuthForm mode="register" />
     </AuthLayout>
   );
 }

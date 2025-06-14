@@ -6,19 +6,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { BookOpen, User, Settings, LogOut } from "lucide-react";
-
-// Mock user data, replace with actual auth context later
-const mockUser = {
-  name: "Alex Traveler",
-  email: "alex.traveler@example.com",
-  joinDate: "2023-05-15",
-};
+import { useAuthStore } from "@/store/auth-store";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default function DashboardPage() {
+  const { user, logout } = useAuthStore();
+  const router = useRouter();
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <MainLayout>
       <PageHeader 
-        title={`Welcome, ${mockUser.name}!`}
+        title={`Welcome, ${user.name || user.email}!`}
         description="Manage your bookings, profile, and settings."
       />
 
@@ -42,8 +45,10 @@ export default function DashboardPage() {
             <User className="h-5 w-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold truncate">{mockUser.email}</div>
-            <p className="text-xs text-muted-foreground">Joined: {new Date(mockUser.joinDate).toLocaleDateString()}</p>
+            <div className="text-2xl font-bold truncate">{user.email}</div>
+            <p className="text-xs text-muted-foreground">
+              {user.mobile ? `Mobile: ${user.mobile}` : ''}
+            </p>
              <Link href="/dashboard/profile" passHref>
               <Button variant="link" className="px-0 pt-2">Edit Profile</Button>
             </Link>
@@ -65,7 +70,15 @@ export default function DashboardPage() {
       </div>
 
       <div className="mt-12 text-center">
-        <Button variant="destructive" size="lg" onClick={() => alert("Logout not implemented")}>
+        <Button 
+          variant="destructive" 
+          size="lg" 
+          onClick={() => {
+            logout();
+            toast.success('Logged out successfully');
+            router.push('/login');
+          }}
+        >
           <LogOut className="mr-2 h-5 w-5" /> Log Out
         </Button>
       </div>
