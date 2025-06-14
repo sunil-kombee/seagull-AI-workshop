@@ -24,7 +24,10 @@ export default function HomePage() {
           src="https://placehold.co/1920x1080.png" 
           alt="Travel background" 
           layout="fill" 
-          objectFit="cover" 
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
           className="absolute z-0 opacity-30" 
           data-ai-hint="travel landscape"
           priority
@@ -87,7 +90,10 @@ export default function HomePage() {
           src="https://placehold.co/1200x400.png" 
           alt="CTA background" 
           layout="fill" 
-          objectFit="cover" 
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
           className="absolute z-0 opacity-20 rounded-lg" 
           data-ai-hint="happy travelers"
         />

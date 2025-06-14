@@ -70,7 +70,10 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
               src={service.image}
               alt={service.name}
               layout="fill"
-              objectFit="cover"
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center',
+              }}
               data-ai-hint={service.dataAiHint}
               className="transition-transform duration-500 hover:scale-105"
             />

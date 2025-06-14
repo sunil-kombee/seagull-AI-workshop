@@ -21,7 +21,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
                 src={image}
                 alt={name}
                 layout="fill"
-                objectFit="cover"
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
                 className="transition-transform duration-300 group-hover:scale-105"
                 data-ai-hint={dataAiHint}
               />
