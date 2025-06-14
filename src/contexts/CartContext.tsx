@@ -1,17 +1,24 @@
 "use client";
 
-import type { Service } from '@/data/services';
-import type { ReactNode } from 'react';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { Service } from "@/data/services";
+import type { ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export interface CartItem extends Service {
   quantity: number;
+  bookingDate?: string; // ISO string for serialization
+  bookingTime?: string;
 }
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (service: Service, quantity?: number) => void;
+  addToCart: (
+    service: Service,
+    quantity?: number,
+    bookingDate?: Date,
+    bookingTime?: string
+  ) => void;
   removeFromCart: (serviceId: string) => void;
   updateQuantity: (serviceId: string, quantity: number) => void;
   clearCart: () => void;
@@ -29,25 +36,49 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const storedCartItems = localStorage.getItem('cartItems');
+    const storedCartItems = localStorage.getItem("cartItems");
     if (storedCartItems) {
       setCartItems(JSON.parse(storedCartItems));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (service: Service, quantity: number = 1) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === service.id);
+  const addToCart = (
+    service: Service,
+    quantity: number = 1,
+    bookingDate?: Date,
+    bookingTime?: string
+  ) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find(
+        (item) =>
+          item.id === service.id &&
+          item.bookingDate ===
+            (bookingDate ? bookingDate.toISOString() : undefined) &&
+          item.bookingTime === bookingTime
+      );
       if (existingItem) {
-        return prevItems.map(item =>
-          item.id === service.id ? { ...item, quantity: item.quantity + quantity } : item
+        return prevItems.map((item) =>
+          item.id === service.id &&
+          item.bookingDate ===
+            (bookingDate ? bookingDate.toISOString() : undefined) &&
+          item.bookingTime === bookingTime
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         );
       }
-      return [...prevItems, { ...service, quantity }];
+      return [
+        ...prevItems,
+        {
+          ...service,
+          quantity,
+          bookingDate: bookingDate ? bookingDate.toISOString() : undefined,
+          bookingTime,
+        },
+      ];
     });
     toast({
       title: "Added to cart",
@@ -56,7 +87,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeFromCart = (serviceId: string) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== serviceId));
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.id !== serviceId)
+    );
     toast({
       title: "Removed from cart",
       description: `Item has been removed from your cart.`,
@@ -68,8 +101,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (quantity <= 0) {
       removeFromCart(serviceId);
     } else {
-      setCartItems(prevItems =>
-        prevItems.map(item =>
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
           item.id === serviceId ? { ...item, quantity } : item
         )
       );
@@ -85,7 +118,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
   };
 
   const getItemCount = () => {
@@ -93,7 +129,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getItemCount, isCartOpen, setIsCartOpen }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        getCartTotal,
+        getItemCount,
+        isCartOpen,
+        setIsCartOpen,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
@@ -102,7 +150,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 };

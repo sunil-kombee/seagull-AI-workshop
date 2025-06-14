@@ -21,7 +21,7 @@ export default function CartPage() {
       {cartItems.length === 0 ? (
         <div className="text-center py-16 bg-card rounded-lg shadow-md">
           <ShoppingCart className="h-24 w-24 text-muted-foreground/50 mx-auto mb-6" />
-          <h2 className="text-2xl font-semibold font-headline text-foreground mb-3">
+          <h2 className="text-2xl font-semibold  text-foreground mb-3">
             Your cart is empty.
           </h2>
           <p className="text-muted-foreground mb-6">
@@ -39,7 +39,7 @@ export default function CartPage() {
             ))}
           </div>
           <Card className="lg:col-span-1 p-6 shadow-lg sticky top-24">
-            <h2 className="text-2xl font-bold font-headline text-primary mb-6">
+            <h2 className="text-2xl font-bold  text-primary mb-6">
               Order Summary
             </h2>
             <div className="space-y-3 mb-6">

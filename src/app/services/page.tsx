@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import Link from "next/link";
 
 interface ServicesPageProps {
   searchParams?: Promise<{
@@ -59,7 +60,10 @@ export default async function ServicesPage({
     return 0;
   });
 
-  // TODO: Implement actual filtering and sorting based on searchParams
+  // Sectioned services
+  const featuredServices = mockServices.filter((s) => s.featured);
+  const weeklyDeals = mockServices.filter((s) => s.weeklyDeal);
+  const popularServices = mockServices.filter((s) => s.popular);
 
   return (
     <MainLayout>
@@ -93,26 +97,62 @@ export default async function ServicesPage({
               ))}
             </SelectContent>
           </Select>
-          {/* Add sort by select later if needed */}
         </div>
       </div>
 
-      {filteredServices.length > 0 ? (
+      {/* Featured Services */}
+      <section className="mb-10">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl md:text-2xl font-bold">Featured Services</h2>
+          <Link
+            href="/services?section=featured"
+            className="text-primary text-sm font-medium hover:underline"
+          >
+            See All
+          </Link>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredServices.map((service) => (
+          {featuredServices.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
         </div>
-      ) : (
-        <div className="text-center py-16">
-          <h2 className="text-2xl font-semibold font-headline text-muted-foreground">
-            No services found
-          </h2>
-          <p className="mt-2 text-foreground">
-            Try adjusting your search or filters.
-          </p>
+      </section>
+
+      {/* Weekly Deals */}
+      <section className="mb-10">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl md:text-2xl font-bold">Weekly Deals</h2>
+          <Link
+            href="/services?section=weekly"
+            className="text-primary text-sm font-medium hover:underline"
+          >
+            See All
+          </Link>
         </div>
-      )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {weeklyDeals.map((service) => (
+            <ServiceCard key={service.id} service={service} />
+          ))}
+        </div>
+      </section>
+
+      {/* Popular Services */}
+      <section className="mb-10">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl md:text-2xl font-bold">Popular Services</h2>
+          <Link
+            href="/services?section=popular"
+            className="text-primary text-sm font-medium hover:underline"
+          >
+            See All
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {popularServices.map((service) => (
+            <ServiceCard key={service.id} service={service} />
+          ))}
+        </div>
+      </section>
     </MainLayout>
   );
 }

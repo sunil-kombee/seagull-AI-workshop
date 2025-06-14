@@ -1,11 +1,17 @@
-import type { Metadata } from 'next';
-import './globals.css';
+import type { Metadata } from "next";
+import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/contexts/CartContext";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
-  title: 'Global Travel Hub',
-  description: 'Your one-stop solution for travel services worldwide.',
+  title: "Global Travel Hub",
+  description: "Your one-stop solution for travel services worldwide.",
 };
 
 export default function RootLayout({
@@ -15,12 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-body antialiased bg-background text-foreground flex flex-col min-h-screen" suppressHydrationWarning={true}>
+      <body
+        className={`font-poppins antialiased bg-background text-foreground flex flex-col min-h-screen ${poppins.className}`}
+        suppressHydrationWarning={true}
+      >
         <CartProvider>
           {children}
           <Toaster />

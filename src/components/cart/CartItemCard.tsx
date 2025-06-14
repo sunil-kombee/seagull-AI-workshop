@@ -1,12 +1,12 @@
 "use client";
 
-import Image from 'next/image';
-import type { CartItem } from '@/contexts/CartContext';
-import { useCart } from '@/contexts/CartContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Minus, Plus, X } from 'lucide-react';
-import Link from 'next/link';
+import Image from "next/image";
+import type { CartItem } from "@/contexts/CartContext";
+import { useCart } from "@/contexts/CartContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Minus, Plus, X } from "lucide-react";
+import Link from "next/link";
 
 interface CartItemCardProps {
   item: CartItem;
@@ -33,35 +33,70 @@ export default function CartItemCard({ item }: CartItemCardProps) {
       </Link>
       <div className="flex-grow">
         <Link href={`/services/${item.id}`}>
-         <h3 className="text-lg font-semibold font-headline text-foreground hover:text-primary transition-colors">{item.name}</h3>
+          <h3 className="text-lg font-semibold  text-foreground hover:text-primary transition-colors">
+            {item.name}
+          </h3>
         </Link>
         <p className="text-sm text-muted-foreground">{item.category}</p>
+        {item.bookingDate && item.bookingTime && (
+          <p className="text-xs text-muted-foreground mt-1">
+            {new Intl.DateTimeFormat("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }).format(new Date(item.bookingDate))}
+            {" • "}
+            {item.bookingTime}
+          </p>
+        )}
         <p className="text-lg font-medium text-primary mt-1">
-          {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency }).format(item.price)}
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: item.currency,
+          }).format(item.price)}
         </p>
         <div className="flex items-center space-x-2 mt-2">
-          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleQuantityChange(item.quantity - 1)} disabled={item.quantity <= 1}>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => handleQuantityChange(item.quantity - 1)}
+            disabled={item.quantity <= 1}
+          >
             <Minus className="h-4 w-4" />
           </Button>
-          <Input 
-            type="number" 
-            className="h-8 w-12 text-center px-0" 
-            value={item.quantity} 
+          <Input
+            type="number"
+            className="h-8 w-12 text-center px-0"
+            value={item.quantity}
             onChange={(e) => handleQuantityChange(parseInt(e.target.value, 10))}
             min="1"
           />
-          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleQuantityChange(item.quantity + 1)}>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => handleQuantityChange(item.quantity + 1)}
+          >
             <Plus className="h-4 w-4" />
           </Button>
         </div>
       </div>
       <div className="flex flex-col items-end justify-between h-full">
-         <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)} className="text-muted-foreground hover:text-destructive">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => removeFromCart(item.id)}
+          className="text-muted-foreground hover:text-destructive"
+        >
           <X className="h-5 w-5" />
           <span className="sr-only">Remove item</span>
         </Button>
         <p className="text-lg font-semibold text-foreground mt-auto">
-          {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency }).format(item.price * item.quantity)}
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: item.currency,
+          }).format(item.price * item.quantity)}
         </p>
       </div>
     </div>

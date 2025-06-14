@@ -30,7 +30,7 @@ export default function CartSidebar() {
       <SheetContent className="w-full sm:max-w-md flex flex-col p-0 bg-card shadow-xl">
         <SheetHeader className="p-6 pb-4 border-b">
           <div className="flex justify-between items-center">
-            <SheetTitle className="text-2xl font-headline text-primary">
+            <SheetTitle className="text-2xl  text-primary">
               Your Cart
             </SheetTitle>
             <SheetClose asChild>
@@ -81,6 +81,44 @@ export default function CartSidebar() {
                     }).format(getCartTotal())}
                     {/* Assuming USD, ideally use first item's currency or a global setting */}
                   </span>
+                </div>
+                {/* Example discount logic: $20 off if subtotal > $300 */}
+                {getCartTotal() > 300 && (
+                  <div className="flex justify-between items-center text-green-600 text-base">
+                    <span>Discount</span>
+                    <span>
+                      -
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      }).format(20)}
+                    </span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center text-2xl font-bold border-t pt-4">
+                  <span>Total</span>
+                  <span>
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(
+                      getCartTotal() > 300
+                        ? getCartTotal() - 20
+                        : getCartTotal()
+                    )}
+                  </span>
+                </div>
+                {/* Promo code input UI */}
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    type="text"
+                    className="flex-1 border border-border rounded-md px-3 py-2 text-sm"
+                    placeholder="Add promo code"
+                    disabled
+                  />
+                  <Button size="sm" disabled>
+                    Apply
+                  </Button>
                 </div>
                 <SheetClose asChild>
                   <Button
