@@ -1,12 +1,12 @@
 "use client";
 
-import PageHeader from "@/components/ui/PageHeader";
 import CartItemCard from "@/components/cart/CartItemCard";
-import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import PageHeader from "@/components/ui/PageHeader";
+import { useCartStore } from "@/store/cart-store";
 import { ShoppingCart } from "lucide-react";
+import Link from "next/link";
 
 export default function CartPage() {
   const cartItems = useCartStore((state) => state.cartItems);
@@ -32,7 +32,7 @@ export default function CartPage() {
             <Button size="lg">Explore Services</Button>
           </Link>
         </div>
-      ) :
+      ) : (
         <div className="grid lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2 space-y-6">
             {cartItems.map((item) => (
