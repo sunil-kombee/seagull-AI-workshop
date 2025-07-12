@@ -38,6 +38,37 @@ export default function CartItemCard({ item }: CartItemCardProps) {
           </h3>
         </Link>
         <p className="text-sm text-muted-foreground">{item.category}</p>
+        {item.selectedAddOns && item.selectedAddOns.length > 0 && (
+          <div className="mt-1 space-y-1">
+            {item.selectedAddOns.map((addon) => (
+              <div
+                key={addon.name}
+                className="flex justify-between text-xs text-muted-foreground"
+              >
+                <span>+ {addon.name}</span>
+                <span>
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: item.currency,
+                  }).format(addon.price)}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+        {/* Per-item subtotal */}
+        <p className="text-xs font-semibold text-primary mt-1">
+          Subtotal:{" "}
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: item.currency,
+          }).format(
+            (item.price +
+              (item.selectedAddOns?.reduce((sum, a) => sum + a.price, 0) ||
+                0)) *
+              item.quantity
+          )}
+        </p>
         {item.bookingDate && item.bookingTime && (
           <p className="text-xs text-muted-foreground mt-1">
             {new Intl.DateTimeFormat("en-US", {

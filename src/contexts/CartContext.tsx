@@ -9,6 +9,7 @@ export interface CartItem extends Service {
   quantity: number;
   bookingDate?: string; // ISO string for serialization
   bookingTime?: string;
+  selectedAddOns?: { name: string; price: number }[];
 }
 
 interface CartContextType {
@@ -17,7 +18,8 @@ interface CartContextType {
     service: Service,
     quantity?: number,
     bookingDate?: Date,
-    bookingTime?: string
+    bookingTime?: string,
+    selectedAddOns?: { name: string; price: number }[]
   ) => void;
   removeFromCart: (serviceId: string) => void;
   updateQuantity: (serviceId: string, quantity: number) => void;
@@ -50,7 +52,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     service: Service,
     quantity: number = 1,
     bookingDate?: Date,
-    bookingTime?: string
+    bookingTime?: string,
+    selectedAddOns?: { name: string; price: number }[]
   ) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
@@ -58,14 +61,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           item.id === service.id &&
           item.bookingDate ===
             (bookingDate ? bookingDate.toISOString() : undefined) &&
-          item.bookingTime === bookingTime
+          item.bookingTime === bookingTime &&
+          JSON.stringify(item.selectedAddOns) === JSON.stringify(selectedAddOns)
       );
       if (existingItem) {
         return prevItems.map((item) =>
           item.id === service.id &&
           item.bookingDate ===
             (bookingDate ? bookingDate.toISOString() : undefined) &&
-          item.bookingTime === bookingTime
+          item.bookingTime === bookingTime &&
+          JSON.stringify(item.selectedAddOns) === JSON.stringify(selectedAddOns)
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -77,6 +82,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           quantity,
           bookingDate: bookingDate ? bookingDate.toISOString() : undefined,
           bookingTime,
+          selectedAddOns,
         },
       ];
     });
@@ -118,10 +124,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getCartTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+    return cartItems.reduce((total, item) => {
+      const addOnsTotal =
+        item.selectedAddOns?.reduce((sum, a) => sum + a.price, 0) || 0;
+      return total + (item.price + addOnsTotal) * item.quantity;
+    }, 0);
   };
 
   const getItemCount = () => {

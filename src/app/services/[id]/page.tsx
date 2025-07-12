@@ -14,7 +14,9 @@ import {
   Smartphone,
   ShieldCheck,
   CheckCircle,
+  Calendar,
 } from "lucide-react";
+import BookingWidget from "@/components/services/BookingWidget";
 
 const iconMap = {
   users: Users,
@@ -46,18 +48,6 @@ export default async function ServiceDetailPage({
     );
   }
   const { service, relatedServices = [] } = data;
-  // --- Booking widget state (client-side only) ---
-  // This is a server component, so we will render a placeholder for the calendar and time picker.
-  // For a real implementation, this would be a client component or use 'use client'.
-  // For now, just render the calendar and time slots visually.
-  const timeSlots = [
-    "9:00 AM",
-    "10:30 AM",
-    "12:00 PM",
-    "1:30 PM",
-    "3:00 PM",
-    "4:30 PM",
-  ];
   return (
     <MainLayout>
       {/* HERO SECTION */}
@@ -173,83 +163,7 @@ export default async function ServiceDetailPage({
       )}
 
       {/* BOOKING WIDGET */}
-      {service.booking && (
-        <section className="mb-16 flex justify-center">
-          <Card className="p-8 max-w-xl w-full shadow-xl">
-            <h3 className="text-xl font-bold mb-4">
-              Book Your {service.category.replace(/s$/, "")}
-            </h3>
-            <div className="mb-4 flex flex-col gap-2">
-              <div className="flex justify-between">
-                <span>Price per session:</span>
-                <span className="font-semibold">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: service.currency,
-                  }).format(service.booking.pricePerSession)}
-                </span>
-              </div>
-              {service.booking.discount > 0 && (
-                <div className="flex justify-between text-green-600">
-                  <span>Discount:</span>
-                  <span>-{(service.booking.discount * 100).toFixed(0)}%</span>
-                </div>
-              )}
-              {service.booking.specialOffer && (
-                <div className="bg-green-50 text-green-700 rounded px-3 py-2 text-xs font-medium mt-2">
-                  {service.booking.specialOffer}
-                </div>
-              )}
-            </div>
-            <Separator className="my-4" />
-            {/* Calendar and Time Slot Picker */}
-            <div className="mb-4">
-              <span className="font-semibold block mb-2">Select Date</span>
-              <div className="bg-muted rounded-lg p-4 flex justify-center">
-                <div className="w-full max-w-xs">
-                  {/* Calendar placeholder (replace with real Calendar in client component) */}
-                  <div className="rounded border border-border bg-background p-2 text-center text-muted-foreground">
-                    [ Calendar Here ]
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mb-4">
-              <span className="font-semibold block mb-2">Select Time</span>
-              <div className="flex flex-wrap gap-2">
-                {timeSlots.map((slot) => (
-                  <button
-                    key={slot}
-                    type="button"
-                    className="px-4 py-2 rounded-md border text-sm font-medium transition-colors bg-background text-foreground border-border hover:bg-accent"
-                    // onClick logic would go here
-                  >
-                    {slot}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <span className="font-semibold">Optional Add-ons:</span>
-            <ul className="list-disc ml-6 mt-2 space-y-1">
-              {service.booking.addOns.map((addon) => (
-                <li key={addon.name} className="flex justify-between">
-                  <span>{addon.name}</span>
-                  <span className="text-muted-foreground">
-                    +
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: service.currency,
-                    }).format(addon.price)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <Button size="lg" className="w-full mt-4">
-              Add to Cart
-            </Button>
-          </Card>
-        </section>
-      )}
+      {service.booking && <BookingWidget service={service} />}
     </MainLayout>
   );
 }
