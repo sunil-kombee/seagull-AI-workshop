@@ -21,7 +21,9 @@ type AuthStore = {
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
-      user: null,
+      user: localStorage.getItem("admin_user")
+        ? JSON.parse(localStorage.getItem("admin_user") || "{}")
+        : null,
       setUser: (user) => set({ user }),
       logout: () =>
         set({
