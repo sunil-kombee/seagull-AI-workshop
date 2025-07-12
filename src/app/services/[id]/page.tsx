@@ -128,7 +128,7 @@ export default async function ServiceDetailPage({
         </section>
       )}
 
-      {/* PROCESS */}
+      {/* PROCESSES */}
       {service.process && (
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-center mb-6">Our Process</h2>
