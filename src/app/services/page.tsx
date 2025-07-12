@@ -1,3 +1,5 @@
+"use client";
+
 import MainLayout from "@/components/layout/MainLayout";
 import PageHeader from "@/components/ui/PageHeader";
 import ServiceCard from "@/components/services/ServiceCard";
@@ -12,23 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import Link from "next/link";
+import { useState } from "react";
 
-interface ServicesPageProps {
-  searchParams?: Promise<{
-    category?: string;
-    search?: string;
-    sort?: string;
-  }>;
-}
-
-export default async function ServicesPage({
-  searchParams,
-}: ServicesPageProps) {
-  const params = searchParams ? await searchParams : {};
-  const selectedCategory = params.category || "all";
-  const searchTerm = params.search || "";
-  const sortBy = params.sort || "name_asc";
+export default function ServicesPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sortBy, setSortBy] = useState("name_asc");
 
   let filteredServices: Service[] = mockServices;
 
@@ -62,8 +53,7 @@ export default async function ServicesPage({
 
   // Sectioned services
   const featuredServices = mockServices.filter((s) => s.featured);
-  const weeklyDeals = mockServices.filter((s) => s.weeklyDeal);
-  const popularServices = mockServices.filter((s) => s.popular);
+  // For demo, weeklyDeals and popularServices are not shown, but you can add them similarly
 
   return (
     <MainLayout>
@@ -80,11 +70,11 @@ export default async function ServicesPage({
               type="search"
               placeholder="Search services (e.g., cleaning, haircut, laundry)"
               className="pl-10 w-full"
-              defaultValue={searchTerm}
-              // onChange={(e) => router.push(`/services?search=${e.target.value}`)} // Needs client component for this
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Select defaultValue={selectedCategory}>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Filter by category" />
             </SelectTrigger>

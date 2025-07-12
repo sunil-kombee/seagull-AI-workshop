@@ -1,88 +1,67 @@
-import Logo from "@/components/common/Logo";
-import { Facebook, Twitter, Instagram } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-muted text-muted-foreground mt-auto">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer className="bg-gray-50 text-gray-700 mt-auto border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Brand */}
           <div>
-            <Logo className="text-xl" />
-            <p className="mt-4 text-sm">
-              Your one-stop solution for travel services worldwide. Book airport
-              transfers, activities, tours, and more with ease.
+            <div className="text-xl font-semibold mb-2">CleanCo</div>
+            <p className="text-sm text-gray-500">
+              Professional cleaning services for homes and businesses. Quality
+              guaranteed.
             </p>
           </div>
+          {/* Services */}
           <div>
-            <h3 className="text-lg font-semibold  text-foreground">
-              Quick Links
-            </h3>
-            <ul className="mt-4 space-y-2 text-sm">
-              <li>
-                <a
-                  href="/about"
-                  className="hover:text-primary transition-colors"
-                >
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/services"
-                  className="hover:text-primary transition-colors"
-                >
-                  Services
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/contact"
-                  className="hover:text-primary transition-colors"
-                >
-                  Contact
-                </a>
-              </li>
-              <li>
-                <a href="/faq" className="hover:text-primary transition-colors">
-                  FAQ
-                </a>
-              </li>
+            <div className="font-semibold mb-2">Services</div>
+            <ul className="space-y-1 text-gray-600">
+              <li>House Cleaning</li>
+              <li>Deep Cleaning</li>
+              <li>Office Cleaning</li>
+              <li>Move-in/Move-out</li>
             </ul>
           </div>
+          {/* Company */}
           <div>
-            <h3 className="text-lg font-semibold  text-foreground">
-              Connect With Us
-            </h3>
-            <div className="flex mt-4 space-x-4">
-              <a
-                href="#"
-                aria-label="Facebook"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Facebook size={24} />
-              </a>
-              <a
-                href="#"
-                aria-label="Twitter"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Twitter size={24} />
-              </a>
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Instagram size={24} />
-              </a>
-            </div>
+            <div className="font-semibold mb-2">Company</div>
+            <ul className="space-y-1 text-gray-600">
+              <li>About Us</li>
+              <li>Careers</li>
+              <li>Blog</li>
+              <li>Contact</li>
+            </ul>
+          </div>
+          {/* Support */}
+          <div>
+            <div className="font-semibold mb-2">Support</div>
+            <ul className="space-y-1 text-gray-600">
+              <li>Help Center</li>
+              <li>FAQs</li>
+              <li>Terms of Service</li>
+              <li>Privacy Policy</li>
+            </ul>
           </div>
         </div>
-        <div className="mt-12 border-t border-border pt-8 text-center text-sm">
-          <p>
-            &copy; {new Date().getFullYear()} Global Travel Hub. All rights
-            reserved.
-          </p>
+        <div className="mt-12 border-t border-gray-200 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
+          <div className="mb-4 md:mb-0">
+            &copy; {new Date().getFullYear()} CleanCo. All rights reserved.
+          </div>
+          <div className="flex space-x-8">
+            <a href="#" className="hover:text-gray-900">
+              Facebook
+            </a>
+            <a href="#" className="hover:text-gray-900">
+              Twitter
+            </a>
+            <a href="#" className="hover:text-gray-900">
+              Instagram
+            </a>
+            <a href="#" className="hover:text-gray-900">
+              LinkedIn
+            </a>
+          </div>
         </div>
       </div>
     </footer>
