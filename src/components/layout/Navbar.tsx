@@ -29,6 +29,7 @@ export default function Navbar() {
   const navItems = [
     { href: '/', label: 'Home' },
     { href: '/services', label: 'Services' },
+    { href: '/products', label: 'Products' },
     ...(user?.isAuthenticated ? [{ href: '/dashboard', label: 'Dashboard' }] : []),
   ];
 
