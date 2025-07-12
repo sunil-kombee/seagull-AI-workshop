@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
+import Link from "next/link";
 
 const ADMIN_LOGIN_BG = "linear-gradient(135deg, #5b5be6 0%, #6e4ff7 100%)";
 
@@ -135,6 +136,14 @@ export default function AdminLoginPage() {
             <span className="inline-flex items-center gap-2">
               <span className="text-base">🛡️</span> Secure, encrypted connection
             </span>
+          </div>
+          <div className="text-center mt-4">
+            <Link
+              href="/login"
+              className="text-[#5b5be6] hover:underline text-sm font-medium"
+            >
+              Go to User Login
+            </Link>
           </div>
         </form>
       </div>

@@ -1,5 +1,6 @@
 import Logo from "@/components/common/Logo";
 import { Facebook, Twitter, Instagram } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -19,33 +20,36 @@ export default function Footer() {
             </h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <a
+                <Link
                   href="/about"
                   className="hover:text-primary transition-colors"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/services"
                   className="hover:text-primary transition-colors"
                 >
                   Services
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/contact"
                   className="hover:text-primary transition-colors"
                 >
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/faq" className="hover:text-primary transition-colors">
+                <Link
+                  href="/faq"
+                  className="hover:text-primary transition-colors"
+                >
                   FAQ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
