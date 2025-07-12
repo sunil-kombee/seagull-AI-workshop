@@ -13,23 +13,29 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
 
 const formSchema = z.object({
-  contact: z.string().min(1, "Required").refine(
-    (value) => {
-      const isPhone = /^[0-9]{10}$/.test(value);
-      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      return isPhone || isEmail;
-    },
-    { message: "Enter a valid email or 10-digit mobile number" }
-  ),
+  contact: z
+    .string()
+    .min(1, "Required")
+    .refine(
+      (value) => {
+        const isPhone = /^[0-9]{10}$/.test(value);
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        return isPhone || isEmail;
+      },
+      { message: "Enter a valid email or 10-digit mobile number" }
+    ),
   name: z.string().min(2, "Name must be at least 2 characters").optional(),
-  address: z.string().min(5, "Address must be at least 5 characters").optional(),
+  address: z
+    .string()
+    .min(5, "Address must be at least 5 characters")
+    .optional(),
   otp: z.string().length(6, "OTP must be 6 digits").optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 interface Props {
-  mode: 'login' | 'register';
+  mode: "login" | "register";
 }
 
 export default function AuthForm({ mode }: Props) {
@@ -37,7 +43,7 @@ export default function AuthForm({ mode }: Props) {
   const [step, setStep] = useState<"input" | "otp">("input");
   const [timer, setTimer] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const isRegister = mode === 'register';
+  const isRegister = mode === "register";
 
   const {
     register,
@@ -74,28 +80,32 @@ export default function AuthForm({ mode }: Props) {
         contact: data.contact,
         ...(isRegister && {
           name: data.name,
-          address: data.address
-        })
+          address: data.address,
+        }),
       };
-      
+
       const response = await axios.post("/api/auth/send-otp", payload);
-      
+
       if (response.status === 200) {
         const isPhone = /^[0-9]{10}$/.test(data.contact);
-        toast.success(`OTP sent to ${isPhone ? 'mobile' : 'email'}!`);
+        toast.success(`OTP sent to ${isPhone ? "mobile" : "email"}!`);
         setStep("otp");
         startTimer();
       } else {
-        throw new Error('Failed to send OTP');
+        throw new Error("Failed to send OTP");
       }
     } catch (err: any) {
-      console.error('Send OTP error:', err);
-      toast.error(err.response?.data?.message || 'Failed to send OTP. Please try again.');
-      setError("contact", { message: err.response?.data?.message || "Failed to send OTP" });
+      console.error("Send OTP error:", err);
+      toast.error(
+        err.response?.data?.message || "Failed to send OTP. Please try again."
+      );
+      setError("contact", {
+        message: err.response?.data?.message || "Failed to send OTP",
+      });
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleVerifyOTP = async (data: FormValues) => {
     try {
@@ -112,34 +122,50 @@ export default function AuthForm({ mode }: Props) {
           ...user,
           isAuthenticated: true,
         });
-        toast.success(mode === 'login' ? 'Logged in successfully!' : 'Registered successfully!');
-        
+        toast.success(
+          mode === "login"
+            ? "Logged in successfully!"
+            : "Registered successfully!"
+        );
+
         // Wait for the auth store update before navigating
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         // Clear the form and reset the timer
         setStep("input");
         setTimer(0);
-        
+
         // Navigate to dashboard
-        router.push('/dashboard');
+        router.push("/dashboard");
       } else {
-        throw new Error('Invalid or expired OTP');
+        throw new Error("Invalid or expired OTP");
       }
     } catch (err: any) {
-      console.error('Verify OTP error:', err);
-      toast.error(err.response?.data?.message || 'Invalid or expired OTP. Please try again.');
-      setError("otp", { message: err.response?.data?.message || "Invalid or expired OTP" });
+      console.error("Verify OTP error:", err);
+      toast.error(
+        err.response?.data?.message ||
+          "Invalid or expired OTP. Please try again."
+      );
+      setError("otp", {
+        message: err.response?.data?.message || "Invalid or expired OTP",
+      });
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="max-w-md w-full space-y-6">
-      <h1 className="text-2xl font-bold text-center">{mode === 'login' ? 'Login' : 'Register'}</h1>
+      <h1 className="text-2xl font-bold text-center">
+        {mode === "login" ? "Login" : "Register"}
+      </h1>
 
-      <form onSubmit={handleSubmit(step === "input" ? handleSendOTP : handleVerifyOTP)} className="space-y-6">
+      <form
+        onSubmit={handleSubmit(
+          step === "input" ? handleSendOTP : handleVerifyOTP
+        )}
+        className="space-y-6"
+      >
         <div className="space-y-4">
           {step === "input" && (
             <>
@@ -156,12 +182,18 @@ export default function AuthForm({ mode }: Props) {
                     placeholder="Enter your full name"
                     disabled={isLoading}
                   />
-                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+                  {errors.name && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
               )}
 
               <div>
-                <label className="block font-medium mb-1">Email or Mobile</label>
+                <label className="block font-medium mb-1">
+                  Email or Mobile
+                </label>
                 <input
                   type="text"
                   {...register("contact")}
@@ -172,7 +204,11 @@ export default function AuthForm({ mode }: Props) {
                   placeholder="Enter email or mobile"
                   disabled={isLoading}
                 />
-                {errors.contact && <p className="text-red-500 text-sm mt-1">{errors.contact.message}</p>}
+                {errors.contact && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.contact.message}
+                  </p>
+                )}
               </div>
 
               {isRegister && (
@@ -187,7 +223,11 @@ export default function AuthForm({ mode }: Props) {
                     placeholder="Enter your address"
                     disabled={isLoading}
                   />
-                  {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>}
+                  {errors.address && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.address.message}
+                    </p>
+                  )}
                 </div>
               )}
             </>
@@ -207,7 +247,11 @@ export default function AuthForm({ mode }: Props) {
                   placeholder="6-digit OTP"
                   disabled={isLoading}
                 />
-                {errors.otp && <p className="text-red-500 text-sm mt-1">{errors.otp.message}</p>}
+                {errors.otp && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.otp.message}
+                  </p>
+                )}
               </div>
 
               <div className="mt-4">
@@ -251,7 +295,9 @@ export default function AuthForm({ mode }: Props) {
               {isLoading ? "Please wait..." : "Verify OTP"}
             </button>
             {timer > 0 ? (
-              <p className="text-center text-gray-500">Resend OTP in {timer}s</p>
+              <p className="text-center text-gray-500">
+                Resend OTP in {timer}s
+              </p>
             ) : (
               <button
                 type="button"
@@ -264,18 +310,28 @@ export default function AuthForm({ mode }: Props) {
           </>
         )}
       </form>
+      {mode === "login" && (
+        <div className="text-center mt-4">
+          <Link
+            href="/admin/login"
+            className="text-sm text-blue-600 hover:underline font-medium"
+          >
+            Admin Login
+          </Link>
+        </div>
+      )}
 
       <p className="text-center text-sm text-muted-foreground">
-        {mode === 'login' ? (
+        {mode === "login" ? (
           <>
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <Link href="/register" className="text-primary hover:underline">
               Sign up
             </Link>
           </>
         ) : (
           <>
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link href="/login" className="text-primary hover:underline">
               Log in
             </Link>

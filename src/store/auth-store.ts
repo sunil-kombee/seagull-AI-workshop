@@ -1,37 +1,43 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 type User = {
-  id: string
-  email?: string
-  mobile?: string
-  name?: string
-  isAuthenticated: boolean
-}
+  id: string;
+  email?: string;
+  mobile?: string;
+  name?: string;
+  isAuthenticated: boolean;
+  role?: string;
+  token?: string;
+};
 
 type AuthStore = {
-  user: User | null
-  setUser: (user: User) => void
-  logout: () => void
-  isAuthenticated: () => boolean
-}
+  user: User | null;
+  setUser: (user: User) => void;
+  logout: () => void;
+  isAuthenticated: () => boolean;
+};
 
-export const useAuthStore = create<AuthStore>()(persist(
-  (set, get) => ({
-    user: null,
-    setUser: (user) => set({ user }),
-    logout: () => set({
-      user: null
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set, get) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+      logout: () =>
+        set({
+          user: null,
+        }),
+      isAuthenticated: () => {
+        const { user } = get();
+        return user?.isAuthenticated || false;
+      },
     }),
-    isAuthenticated: () => {
-      const { user } = get()
-      return user?.isAuthenticated || false
+    {
+      name: "auth-storage",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        user: state.user,
+      }),
     }
-  }),
-  {
-    name: 'auth-storage',
-    partialize: (state) => ({
-      user: state.user
-    })
-  }
-))
+  )
+);
