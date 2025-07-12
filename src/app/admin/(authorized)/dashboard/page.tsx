@@ -1,6 +1,33 @@
 "use client";
 import { useAuthStore } from "@/store/auth-store";
 import useSWR from "swr";
+import React from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  CartesianGrid,
+} from "recharts";
+import {
+  Bell,
+  Search,
+  Eye,
+  Download,
+  Pencil,
+  Trash2,
+  FilePlus,
+  UserPlus,
+  FileText,
+  Mail,
+  Settings as SettingsIcon,
+} from "lucide-react";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -28,8 +55,11 @@ export default function AdminDashboardPage() {
     "/api/admin/dashboard/booking-distribution",
     fetcher
   );
-  const { data: bookings } = useSWR(
-    "/api/admin/dashboard/recent-bookings",
+  // Pagination state
+  const [page, setPage] = React.useState(1);
+  const pageSize = 6;
+  const { data: bookings, isLoading: bookingsLoading } = useSWR(
+    `/api/admin/dashboard/recent-bookings?page=${page}&pageSize=${pageSize}`,
     fetcher
   );
   if (!user) return null;
@@ -45,7 +75,7 @@ export default function AdminDashboardPage() {
             placeholder="Search..."
           />
           <button className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-            <span className="text-xl">🔔</span>
+            <Bell className="w-5 h-5" />
           </button>
         </div>
       </div>
@@ -118,35 +148,45 @@ export default function AdminDashboardPage() {
             <span className="text-xs text-gray-400">Last 7 Days</span>
           </div>
           <div className="h-40 flex items-center justify-center text-gray-400">
-            {/* Simple SVG line chart for mockup */}
             {trend ? (
-              <svg
-                width="100%"
-                height="100"
-                viewBox="0 0 320 100"
-                className="w-full h-32"
-              >
-                <polyline
-                  fill="none"
-                  stroke="#2563eb"
-                  strokeWidth="3"
-                  points={trend
-                    .map(
-                      (d: any, i: number) =>
-                        `${i * 53},${100 - d.revenue / 350}`
-                    )
-                    .join(" ")}
-                />
-                {trend.map((d: any, i: number) => (
-                  <circle
-                    key={d.month}
-                    cx={i * 53}
-                    cy={100 - d.revenue / 350}
-                    r="3"
-                    fill="#2563eb"
+              <ResponsiveContainer width="100%" height={220}>
+                <LineChart
+                  data={trend}
+                  margin={{ left: 24, right: 24, top: 24, bottom: 24 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fontSize: 14 }}
+                    padding={{ left: 20, right: 20 }}
                   />
-                ))}
-              </svg>
+                  <YAxis
+                    tick={{ fontSize: 14 }}
+                    domain={[0, (dataMax: number) => dataMax + 4000]}
+                    tickCount={6}
+                    padding={{ top: 20, bottom: 20 }}
+                  />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="#2563eb"
+                    strokeWidth={3}
+                    dot={{
+                      r: 5,
+                      stroke: "#2563eb",
+                      strokeWidth: 2,
+                      fill: "#fff",
+                    }}
+                    activeDot={{
+                      r: 7,
+                      stroke: "#2563eb",
+                      strokeWidth: 2,
+                      fill: "#2563eb",
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             ) : (
               <span>Loading...</span>
             )}
@@ -155,48 +195,49 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-xl p-6 shadow">
           <div className="font-semibold mb-2">Booking Distribution</div>
           <div className="h-40 flex items-center justify-center text-gray-400">
-            {/* Simple SVG pie chart for mockup */}
             {dist ? (
-              <svg width="100" height="100" viewBox="0 0 32 32">
-                {(() => {
-                  let acc = 0;
-                  return dist.map((d: any, i: number) => {
-                    const start = acc;
-                    const val = (d.value / 100) * 100;
-                    acc += val;
-                    const x1 = 16 + 16 * Math.cos(2 * Math.PI * (start / 100));
-                    const y1 = 16 + 16 * Math.sin(2 * Math.PI * (start / 100));
-                    const x2 = 16 + 16 * Math.cos(2 * Math.PI * (acc / 100));
-                    const y2 = 16 + 16 * Math.sin(2 * Math.PI * (acc / 100));
-                    const large = val > 50 ? 1 : 0;
-                    return (
-                      <path
-                        key={d.label}
-                        d={`M16,16 L${x1},${y1} A16,16 0 ${large} 1 ${x2},${y2} Z`}
-                        fill={d.color}
-                        stroke="#fff"
-                        strokeWidth="0.5"
-                      />
-                    );
-                  });
-                })()}
-              </svg>
+              <ResponsiveContainer width={120} height={120}>
+                <PieChart>
+                  <Pie
+                    data={dist}
+                    dataKey="value"
+                    nameKey="label"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={48}
+                    innerRadius={28}
+                  >
+                    {dist.map((entry: any, idx: number) => (
+                      <Cell key={`cell-${idx}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
             ) : (
               <span>Loading...</span>
             )}
           </div>
-          <div className="flex flex-wrap gap-2 mt-4 justify-center">
-            {dist &&
-              dist.map((d: any) => (
-                <span key={d.label} className="flex items-center gap-1 text-xs">
+          {/* Custom Legend */}
+          {dist && (
+            <div className="flex flex-row flex-wrap items-center justify-center mt-4 gap-x-6 gap-y-2">
+              {dist.map((d: any) => (
+                <div
+                  key={d.label}
+                  className="flex items-center gap-2 text-sm"
+                  style={{ color: d.color }}
+                >
                   <span
                     className="inline-block w-3 h-3 rounded-full"
                     style={{ background: d.color }}
                   />
-                  {d.label}
-                </span>
+                  <span className="font-medium" style={{ color: d.color }}>
+                    {d.label}
+                  </span>
+                </div>
               ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
       {/* Recent Bookings Table */}
@@ -226,8 +267,8 @@ export default function AdminDashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {bookings
-                ? bookings.map((b: any) => (
+              {bookings && bookings.data
+                ? bookings.data.map((b: any) => (
                     <tr key={b.id} className="border-t">
                       <td className="py-2 px-3 font-mono">{b.id}</td>
                       <td className="py-2 px-3">{b.customer}</td>
@@ -239,19 +280,19 @@ export default function AdminDashboardPage() {
                       <td className="py-2 px-3">${b.amount.toFixed(2)}</td>
                       <td className="py-2 px-3 flex gap-2">
                         <button className="hover:text-blue-600" title="View">
-                          <span>🔍</span>
+                          <Eye className="w-4 h-4" />
                         </button>
                         <button
                           className="hover:text-gray-600"
                           title="Download"
                         >
-                          <span>📥</span>
+                          <Download className="w-4 h-4" />
                         </button>
                         <button className="hover:text-gray-600" title="Edit">
-                          <span>✏️</span>
+                          <Pencil className="w-4 h-4" />
                         </button>
                         <button className="hover:text-red-600" title="Delete">
-                          <span>🗑️</span>
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </td>
                     </tr>
@@ -269,44 +310,75 @@ export default function AdminDashboardPage() {
                   ))}
             </tbody>
           </table>
-        </div>
-        <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
-          <span>Showing 1-6 of 240 bookings</span>
-          <div className="flex gap-1">
-            <button className="px-2 py-1 rounded border bg-gray-50">
-              Previous
-            </button>
-            <button className="px-2 py-1 rounded border bg-blue-600 text-white">
-              1
-            </button>
-            <button className="px-2 py-1 rounded border bg-gray-50">2</button>
-            <button className="px-2 py-1 rounded border bg-gray-50">3</button>
-            <button className="px-2 py-1 rounded border bg-gray-50">
-              Next
-            </button>
+          {/* Pagination */}
+          <div className="flex items-center justify-between mt-4 text-xs text-gray-500 w-full">
+            <span>
+              Showing {bookings ? (bookings.page - 1) * pageSize + 1 : 1}-
+              {bookings
+                ? Math.min(bookings.page * pageSize, bookings.total)
+                : pageSize}{" "}
+              of {bookings ? bookings.total : 0} bookings
+            </span>
+            <div className="flex gap-1 min-w-max justify-end">
+              <button
+                className="px-2 py-1 rounded border bg-gray-50"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                Previous
+              </button>
+              {Array.from({
+                length: bookings ? Math.ceil(bookings.total / pageSize) : 1,
+              }).map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`px-2 py-1 rounded border ${
+                    page === idx + 1 ? "bg-blue-600 text-white" : "bg-gray-50"
+                  }`}
+                  onClick={() => setPage(idx + 1)}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+              <button
+                className="px-2 py-1 rounded border bg-gray-50"
+                onClick={() =>
+                  setPage((p) =>
+                    bookings
+                      ? Math.min(Math.ceil(bookings.total / pageSize), p + 1)
+                      : p + 1
+                  )
+                }
+                disabled={
+                  bookings && page === Math.ceil(bookings.total / pageSize)
+                }
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>
       {/* Quick Actions */}
       <div className="bg-white rounded-xl p-4 sm:p-6 shadow grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
         <button className="flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-gray-50">
-          <span className="text-2xl">📝</span>
+          <FilePlus className="w-6 h-6" />
           <span className="text-xs font-semibold">New Booking</span>
         </button>
         <button className="flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-gray-50">
-          <span className="text-2xl">➕</span>
+          <UserPlus className="w-6 h-6" />
           <span className="text-xs font-semibold">Add Customer</span>
         </button>
         <button className="flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-gray-50">
-          <span className="text-2xl">📄</span>
+          <FileText className="w-6 h-6" />
           <span className="text-xs font-semibold">Create Invoice</span>
         </button>
         <button className="flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-gray-50">
-          <span className="text-2xl">✉️</span>
+          <Mail className="w-6 h-6" />
           <span className="text-xs font-semibold">Send Email</span>
         </button>
         <button className="flex flex-col items-center gap-2 p-4 rounded-lg border hover:bg-gray-50">
-          <span className="text-2xl">⚙️</span>
+          <SettingsIcon className="w-6 h-6" />
           <span className="text-xs font-semibold">Settings</span>
         </button>
       </div>
