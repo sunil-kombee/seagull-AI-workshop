@@ -20,7 +20,7 @@ export const Stepper: React.FC<StepperProps> = ({
   return (
     <nav
       className={clsx(
-        "flex items-center justify-center gap-4 w-full",
+        "flex items-center justify-center w-full py-4 sm:py-6",
         className
       )}
       aria-label="Progress"
@@ -29,26 +29,23 @@ export const Stepper: React.FC<StepperProps> = ({
         const isActive = idx === currentStep;
         const isCompleted = idx < currentStep;
         return (
-          <div key={step.label} className="flex items-center gap-2">
+          <div key={step.label} className="flex items-center gap-2 sm:gap-3">
             <div
               className={clsx(
-                "flex items-center justify-center rounded-full w-8 h-8 border-2 transition-colors",
+                "flex items-center justify-center rounded-full border-2 font-bold transition-colors",
+                "w-10 h-10 sm:w-12 sm:h-12 text-lg sm:text-xl",
                 isActive
-                  ? "bg-primary text-white border-primary"
+                  ? "bg-primary text-white border-primary shadow-lg"
                   : isCompleted
                   ? "bg-primary/10 text-primary border-primary"
                   : "bg-muted text-muted-foreground border-border"
               )}
             >
-              {step.icon ? (
-                step.icon
-              ) : (
-                <span className="font-bold">{idx + 1}</span>
-              )}
+              {step.icon ? step.icon : <span>{idx + 1}</span>}
             </div>
             <span
               className={clsx(
-                "text-sm font-medium",
+                "text-base sm:text-lg font-semibold transition-colors",
                 isActive
                   ? "text-primary"
                   : isCompleted
@@ -59,7 +56,10 @@ export const Stepper: React.FC<StepperProps> = ({
               {step.label}
             </span>
             {idx < steps.length - 1 && (
-              <span className="w-8 h-0.5 bg-border mx-2" />
+              <span className="hidden sm:block w-16 h-1 bg-border mx-2 rounded-full" />
+            )}
+            {idx < steps.length - 1 && (
+              <span className="block sm:hidden w-8 h-0.5 bg-border mx-1 rounded-full" />
             )}
           </div>
         );
