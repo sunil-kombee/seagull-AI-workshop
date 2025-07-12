@@ -79,10 +79,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t border-border pt-8 text-center text-sm">
-          <p>
-            &copy; {new Date().getFullYear()} Global Travel Hub. All rights
-            reserved.
-          </p>
+          <p>&copy; {new Date().getFullYear()} CleanCo. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -1,7 +1,7 @@
-# 📘 Cursor AI Frontend Rules — Seagull Project
+# 📘 Cursor AI Frontend Rules — CleanCo Project
 
 ## Project Name
-**Seagull** — Global Travel Services Booking Platform
+**CleanCo** — Home & Daily Services Booking Platform
 
 ## Tech Stack
 - **Next.js**: (App Router)
@@ -12,7 +12,7 @@
 - **Networking**: Axios with interceptors
 - **UX Libraries**: Lucide React, Headless UI, react-hot-toast
 - **Utilities**: Day.js, clsx, tailwind-merge
-- **Domain**: TravelTech (Booking, Checkout, Payments, QR)
+- **Domain**: Home & Daily Services (Booking, Checkout, Payments, QR)
 
 ---
 

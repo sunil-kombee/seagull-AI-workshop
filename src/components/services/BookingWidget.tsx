@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar as RadCalendar } from "@/components/ui/calendar";
 import { Calendar, CheckCircle } from "lucide-react";
 import { Service } from "@/data/services";
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/store/cart-store";
 
 export default function BookingWidget({ service }: { service: Service }) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -13,7 +13,7 @@ export default function BookingWidget({ service }: { service: Service }) {
   const [sessions, setSessions] = useState(1);
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const timeSlots = ["9:00 AM", "10:30 AM", "12:00 PM", "1:30 PM"];
 

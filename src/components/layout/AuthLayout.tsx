@@ -20,8 +20,7 @@ export default function AuthLayout({
         {children}
       </div>
       <p className="mt-8 text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} Global Travel Hub. All rights
-        reserved.
+        &copy; {new Date().getFullYear()} CleanCo. All rights reserved.
       </p>
     </div>
   );

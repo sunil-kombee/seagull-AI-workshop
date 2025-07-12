@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import CartItemCard from "@/components/cart/CartItemCard";
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/store/cart-store";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
@@ -36,7 +36,7 @@ export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const router = useRouter();
   const confirmationRef = useRef<HTMLDivElement>(null);
-  const { cartItems, getCartTotal, clearCart } = useCart();
+  const { cartItems, getCartTotal, clearCart } = useCartStore();
 
   function handleNext() {
     setCurrentStep((s) => Math.min(steps.length - 1, s + 1));

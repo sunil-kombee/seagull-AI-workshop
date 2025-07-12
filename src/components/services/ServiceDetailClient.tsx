@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
-import MainLayout from "@/components/layout/MainLayout";
 import PageHeader from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/store/cart-store";
 import { useState } from "react";
 import {
   Minus,
@@ -30,7 +29,7 @@ export default function ServiceDetailClient({
   service,
   relatedServices,
 }: ServiceDetailClientProps) {
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((state) => state.addToCart);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<
     "description" | "reviews" | "provider"
@@ -40,19 +39,17 @@ export default function ServiceDetailClient({
 
   if (!service) {
     return (
-      <MainLayout>
-        <div className="text-center py-10">
-          <PageHeader title="Service Not Found" />
-          <p className="text-muted-foreground">
-            The service you are looking for does not exist or has been moved.
-          </p>
-          <Link href="/services" passHref>
-            <Button className="mt-4">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Services
-            </Button>
-          </Link>
-        </div>
-      </MainLayout>
+      <div className="text-center py-10">
+        <PageHeader title="Service Not Found" />
+        <p className="text-muted-foreground">
+          The service you are looking for does not exist or has been moved.
+        </p>
+        <Link href="/services" passHref>
+          <Button className="mt-4">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Services
+          </Button>
+        </Link>
+      </div>
     );
   }
 
@@ -86,7 +83,7 @@ export default function ServiceDetailClient({
   const total = pricePerSession * quantity - discount;
 
   return (
-    <MainLayout>
+    <>
       <div className="mb-6">
         <Link
           href="/services"
@@ -345,6 +342,6 @@ export default function ServiceDetailClient({
           </div>
         </section>
       )}
-    </MainLayout>
+    </>
   );
 }

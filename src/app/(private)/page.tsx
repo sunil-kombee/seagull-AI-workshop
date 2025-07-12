@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import MainLayout from "@/components/layout/MainLayout";
 import PageHeader from "@/components/ui/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceCategories } from "@/data/services";
@@ -46,7 +45,7 @@ export default function HomePage() {
   };
 
   return (
-    <MainLayout>
+    <>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-primary/70 to-accent/70 text-white py-20 md:py-32 rounded-lg shadow-xl overflow-hidden mb-16">
         {/* Replace with a relevant daily services image if available */}
@@ -75,7 +74,7 @@ export default function HomePage() {
         description="Find everything you need for your home and daily life."
         className="text-center border-none"
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
         {serviceCategories.map((category) => {
           const Icon =
             iconMap[category.slug as keyof typeof iconMap] || Sparkles;
@@ -152,6 +151,6 @@ export default function HomePage() {
           </Link>
         </div>
       </div>
-    </MainLayout>
+    </>
   );
 }

@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { CartProvider } from "@/contexts/CartContext";
-import { ClientOnly } from "@/components/utils/ClientOnly";
 
 export const metadata: Metadata = {
-  title: "Global Travel Hub",
-  description: "Your one-stop solution for travel services worldwide.",
+  title: "CleanCo",
+  description: "Your one-stop solution for home and daily services.",
 };
 
 export default function RootLayout({
@@ -29,12 +26,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background text-foreground flex flex-col min-h-screen">
-        <CartProvider>
-          {children}
-          <ClientOnly>
-            <Toaster />
-          </ClientOnly>
-        </CartProvider>
+        {children}
       </body>
     </html>
   );

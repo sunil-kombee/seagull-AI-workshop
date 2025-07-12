@@ -1,6 +1,6 @@
 "use client";
 
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
 import CartItemCard from "./CartItemCard";
 import {
@@ -16,14 +16,12 @@ import Link from "next/link";
 import { ShoppingCart, X } from "lucide-react";
 
 export default function CartSidebar() {
-  const {
-    cartItems,
-    getCartTotal,
-    getItemCount,
-    isCartOpen,
-    setIsCartOpen,
-    clearCart,
-  } = useCart();
+  const cartItems = useCartStore((state) => state.cartItems);
+  const getCartTotal = useCartStore((state) => state.getCartTotal);
+  const getItemCount = useCartStore((state) => state.getItemCount);
+  const isCartOpen = useCartStore((state) => state.isCartOpen);
+  const setIsCartOpen = useCartStore((state) => state.setIsCartOpen);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>

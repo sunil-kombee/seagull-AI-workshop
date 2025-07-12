@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import type { CartItem } from "@/contexts/CartContext";
-import { useCart } from "@/contexts/CartContext";
+import type { CartItem } from "@/store/cart-store";
+import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Minus, Plus, X } from "lucide-react";
@@ -13,7 +13,8 @@ interface CartItemCardProps {
 }
 
 export default function CartItemCard({ item }: CartItemCardProps) {
-  const { removeFromCart, updateQuantity } = useCart();
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
 
   const handleQuantityChange = (newQuantity: number) => {
     updateQuantity(item.id, newQuantity);

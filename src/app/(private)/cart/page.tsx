@@ -1,19 +1,20 @@
 "use client";
 
-import MainLayout from "@/components/layout/MainLayout";
 import PageHeader from "@/components/ui/PageHeader";
 import CartItemCard from "@/components/cart/CartItemCard";
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { ShoppingCart } from "lucide-react";
 
 export default function CartPage() {
-  const { cartItems, getCartTotal, clearCart } = useCart();
+  const cartItems = useCartStore((state) => state.cartItems);
+  const getCartTotal = useCartStore((state) => state.getCartTotal);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   return (
-    <MainLayout>
+    <>
       <PageHeader
         title="Your Shopping Cart"
         description="Review items in your cart and proceed to checkout."
@@ -31,7 +32,7 @@ export default function CartPage() {
             <Button size="lg">Explore Services</Button>
           </Link>
         </div>
-      ) : (
+      ) :
         <div className="grid lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2 space-y-6">
             {cartItems.map((item) => (
@@ -77,6 +78,6 @@ export default function CartPage() {
           </Card>
         </div>
       )}
-    </MainLayout>
+    </>
   );
 }

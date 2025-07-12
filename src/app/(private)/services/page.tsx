@@ -1,4 +1,3 @@
-import MainLayout from "@/components/layout/MainLayout";
 import PageHeader from "@/components/ui/PageHeader";
 import ServiceCard from "@/components/services/ServiceCard";
 import { mockServices, serviceCategories } from "@/data/services";
@@ -66,7 +65,7 @@ export default async function ServicesPage({
   const popularServices = mockServices.filter((s) => s.popular);
 
   return (
-    <MainLayout>
+    <>
       <PageHeader
         title="Book Daily Services Online"
         description="Discover and book top-rated cleaning, haircut, laundry, pet grooming, and more. Enjoy professional, convenient, and affordable services at your doorstep."
@@ -112,7 +111,6 @@ export default async function ServicesPage({
         </div>
       </section>
 
-      {/* All Services */}
       <section className="mb-10">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl md:text-2xl font-bold">All Services</h2>
@@ -123,6 +121,6 @@ export default async function ServicesPage({
           ))}
         </div>
       </section>
-    </MainLayout>
+    </>
   );
 }
