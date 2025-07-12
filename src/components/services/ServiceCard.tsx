@@ -10,12 +10,31 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tag, Star, Users } from "lucide-react";
+import {
+  Tag,
+  Star,
+  Users,
+  PlaneTakeoff,
+  Ticket,
+  Car,
+  Smartphone,
+  ShieldCheck,
+} from "lucide-react";
 import { Tooltip } from "@/components/ui/tooltip";
 
 interface ServiceCardProps {
   service: Service;
 }
+
+// Icon map for string keys to Lucide icons
+const iconMap = {
+  "plane-takeoff": PlaneTakeoff,
+  ticket: Ticket,
+  car: Car,
+  users: Users,
+  smartphone: Smartphone,
+  "shield-check": ShieldCheck,
+};
 
 export default function ServiceCard({ service }: ServiceCardProps) {
   const {
@@ -26,11 +45,14 @@ export default function ServiceCard({ service }: ServiceCardProps) {
     currency,
     image,
     category,
-    icon: Icon,
+    icon,
     dataAiHint,
     rating,
     reviews,
   } = service;
+
+  // Map icon string to component, with type safety
+  const Icon = icon && iconMap[icon as keyof typeof iconMap];
 
   return (
     <Card

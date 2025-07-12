@@ -1,11 +1,15 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  PlaneTakeoff,
-  Ticket,
-  Car,
   Users,
+  Car,
+  Ticket,
   Smartphone,
   ShieldCheck,
+  Scissors,
+  PawPrint,
+  Sparkles,
+  Home,
+  CalendarCheck,
 } from "lucide-react";
 
 export interface Service {
@@ -17,152 +21,368 @@ export interface Service {
   currency: string;
   image: string;
   category: string;
-  icon?: LucideIcon;
+  icon?: string;
   dataAiHint: string;
   rating?: number;
   reviews?: number;
   featured?: boolean;
   weeklyDeal?: boolean;
   popular?: boolean;
+  features?: Array<{
+    icon: string;
+    title: string;
+    description: string;
+  }>;
+  serviceCoverage?: string[];
+  process?: string[];
+  reviewsList?: Array<{
+    name: string;
+    date: string;
+    rating: number;
+    text: string;
+  }>;
+  booking?: {
+    pricePerSession: number;
+    discount: number;
+    addOns: Array<{ name: string; price: number }>;
+    specialOffer?: string;
+  };
 }
 
 export const serviceCategories = [
   {
-    name: "Airport Transfers",
-    icon: PlaneTakeoff,
-    slug: "airport-transfers",
-    dataAiHint: "airport transport",
+    name: "Cleaning",
+    icon: "sparkles",
+    slug: "cleaning",
+    dataAiHint: "home cleaning",
   },
   {
-    name: "Activity Tickets",
-    icon: Ticket,
-    slug: "activity-tickets",
-    dataAiHint: "event ticket",
+    name: "Haircut",
+    icon: "scissors",
+    slug: "haircut",
+    dataAiHint: "haircut service",
   },
   {
-    name: "Car Rentals",
-    icon: Car,
-    slug: "car-rentals",
-    dataAiHint: "vehicle rental",
+    name: "Laundry",
+    icon: "home",
+    slug: "laundry",
+    dataAiHint: "laundry service",
   },
   {
-    name: "Tour Guides",
-    icon: Users,
-    slug: "tour-guides",
-    dataAiHint: "guide person",
-  },
-  {
-    name: "SIM Cards",
-    icon: Smartphone,
-    slug: "sim-cards",
-    dataAiHint: "mobile chip",
-  },
-  {
-    name: "Travel Insurance",
-    icon: ShieldCheck,
-    slug: "travel-insurance",
-    dataAiHint: "insurance policy",
+    name: "Pet Grooming",
+    icon: "paw-print",
+    slug: "pet-grooming",
+    dataAiHint: "pet grooming",
   },
 ];
 
 export const mockServices: Service[] = [
   {
     id: "1",
-    name: "Airport Transfer - City Center",
-    description: "Comfortable private transfer to your hotel.",
+    name: "Professional Deep House Cleaning",
+    description:
+      "Expert cleaning services that leave your home spotless and refreshed.",
     longDescription:
-      "Enjoy a seamless and comfortable private transfer from the airport directly to your hotel in the city center. Our professional drivers will meet you at arrivals and assist with your luggage, ensuring a stress-free start to your trip. Vehicles are modern, air-conditioned, and regularly sanitized.",
-    price: 50,
+      "Our deep cleaning service tackles dirt and grime in every corner of your home. Perfect for seasonal cleaning or before/after events. Our trained professionals use premium equipment and eco-friendly cleaning solutions.",
+    price: 80,
     currency: "USD",
-    image: "https://placehold.co/600x400.png",
-    category: "Airport Transfers",
-    icon: PlaneTakeoff,
-    dataAiHint: "airport car",
-    rating: 4.8,
-    reviews: 120,
+    image:
+      "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80",
+    category: "Cleaning",
+    icon: "sparkles",
+    dataAiHint: "deep cleaning",
+    rating: 4.9,
+    reviews: 240,
     featured: true,
-    popular: true,
+    features: [
+      {
+        icon: "users",
+        title: "Professional Staff",
+        description:
+          "Background-checked, trained, and committed to excellence.",
+      },
+      {
+        icon: "sparkles",
+        title: "Eco-friendly Products",
+        description: "Safe and effective cleaning solutions.",
+      },
+      {
+        icon: "shield-check",
+        title: "100% Satisfaction",
+        description: "We guarantee your satisfaction with every cleaning.",
+      },
+    ],
+    serviceCoverage: [
+      "Floor cleaning",
+      "Bathroom cleaning",
+      "Kitchen cleaning",
+      "Window cleaning",
+      "Dusting",
+      "Surface sanitization",
+    ],
+    process: [
+      "Book your cleaning online",
+      "Our team arrives on time",
+      "We deep clean your home",
+      "Enjoy your spotless space",
+    ],
+    reviewsList: [
+      {
+        name: "Sarah Johnson",
+        date: "May 16, 2024",
+        rating: 5,
+        text: "The deep cleaning service was exceptional. Every corner of my home is spotless. Will definitely book again!",
+      },
+      {
+        name: "Michael Chen",
+        date: "May 15, 2024",
+        rating: 5,
+        text: "Professional staff and amazing results. I appreciate their attention to detail and eco-friendly products.",
+      },
+      {
+        name: "Emily Rodriguez",
+        date: "May 9, 2024",
+        rating: 5,
+        text: "Best cleaning service I’ve ever used. They transformed my home!",
+      },
+    ],
+    booking: {
+      pricePerSession: 80,
+      discount: 0.2,
+      addOns: [
+        { name: "Deep Carpet Cleaning", price: 30 },
+        { name: "Cabinet Organization", price: 20 },
+      ],
+      specialOffer: "Book 2 sessions and get 20% off your total purchase!",
+    },
   },
   {
     id: "2",
-    name: "Eiffel Tower Summit Ticket",
-    description: "Skip-the-line access to the Eiffel Tower.",
+    name: "Home Haircut & Styling",
+    description:
+      "Salon-quality haircut and styling in the comfort of your home.",
     longDescription:
-      "Experience breathtaking panoramic views of Paris from the summit of the Eiffel Tower. With these skip-the-line tickets, you save valuable time and head straight for the elevators. An unforgettable experience for any visitor to Paris.",
-    price: 75,
-    currency: "EUR",
-    image: "https://placehold.co/600x400.png",
-    category: "Activity Tickets",
-    icon: Ticket,
-    dataAiHint: "landmark ticket",
-    rating: 4.9,
-    reviews: 350,
+      "Our professional stylists bring the salon to you! Get a fresh haircut, beard trim, or styling for any occasion. We use sanitized tools and premium products for all hair types.",
+    price: 40,
+    currency: "USD",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
+    category: "Haircut",
+    icon: "scissors",
+    dataAiHint: "haircut",
+    rating: 4.8,
+    reviews: 180,
     featured: true,
-    weeklyDeal: true,
+    features: [
+      {
+        icon: "scissors",
+        title: "Expert Stylists",
+        description: "Experienced, friendly, and up-to-date with trends.",
+      },
+      {
+        icon: "shield-check",
+        title: "Sanitized Tools",
+        description: "All equipment is sanitized before every appointment.",
+      },
+      {
+        icon: "calendar-check",
+        title: "Flexible Scheduling",
+        description: "Book at your convenience, 7 days a week.",
+      },
+    ],
+    serviceCoverage: [
+      "Men's haircut",
+      "Women's haircut",
+      "Children's haircut",
+      "Beard trim",
+      "Hair styling",
+    ],
+    process: [
+      "Book your appointment online",
+      "Stylist arrives at your home",
+      "Consultation and haircut/styling",
+      "Enjoy your new look!",
+    ],
+    reviewsList: [
+      {
+        name: "Alex Kim",
+        date: "May 14, 2024",
+        rating: 5,
+        text: "Super convenient and my haircut looks great!",
+      },
+      {
+        name: "Priya Patel",
+        date: "May 13, 2024",
+        rating: 5,
+        text: "The stylist was friendly and professional. Loved the experience.",
+      },
+      {
+        name: "Tom Lee",
+        date: "May 10, 2024",
+        rating: 4,
+        text: "Good value and very clean setup.",
+      },
+    ],
+    booking: {
+      pricePerSession: 40,
+      discount: 0.1,
+      addOns: [
+        { name: "Beard Trim", price: 10 },
+        { name: "Hair Wash", price: 8 },
+      ],
+      specialOffer: "Book for 2+ people and get 10% off!",
+    },
   },
   {
     id: "3",
-    name: "Full Day Car Rental with Driver",
-    description: "Explore the city with a personal driver.",
+    name: "Laundry & Ironing Service",
+    description:
+      "Fresh, clean, and neatly ironed clothes delivered to your door.",
     longDescription:
-      "Discover the city highlights at your own pace with our full-day car rental service, complete with a professional, English-speaking driver. Customize your itinerary and enjoy the convenience and comfort of a private vehicle. Ideal for families or small groups.",
-    price: 200,
+      "We pick up, wash, dry, fold, and iron your clothes with care. Choose from regular or express service. Eco-friendly detergents and careful handling for all fabrics.",
+    price: 25,
     currency: "USD",
-    image: "https://placehold.co/600x400.png",
-    category: "Car Rentals",
-    icon: Car,
-    dataAiHint: "city car",
+    image:
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    category: "Laundry",
+    icon: "home",
+    dataAiHint: "laundry",
     rating: 4.7,
-    reviews: 85,
-    weeklyDeal: true,
+    reviews: 95,
+    features: [
+      {
+        icon: "home",
+        title: "Doorstep Pickup & Delivery",
+        description: "We handle everything from start to finish.",
+      },
+      {
+        icon: "sparkles",
+        title: "Eco Detergents",
+        description: "Safe for your clothes and the environment.",
+      },
+      {
+        icon: "calendar-check",
+        title: "Express Options",
+        description: "Same-day or next-day delivery available.",
+      },
+    ],
+    serviceCoverage: [
+      "Washing",
+      "Drying",
+      "Folding",
+      "Ironing",
+      "Express delivery",
+    ],
+    process: [
+      "Schedule your pickup online",
+      "We collect your laundry",
+      "Wash, dry, fold, and iron",
+      "Delivered to your door",
+    ],
+    reviewsList: [
+      {
+        name: "Linda Brown",
+        date: "May 13, 2024",
+        rating: 5,
+        text: "Clothes came back fresh and perfectly folded!",
+      },
+      {
+        name: "Wei Zhang",
+        date: "May 12, 2024",
+        rating: 5,
+        text: "Fast and reliable. Will use again.",
+      },
+      {
+        name: "Fatima Al-Farsi",
+        date: "May 11, 2024",
+        rating: 4,
+        text: "Affordable and convenient.",
+      },
+    ],
+    booking: {
+      pricePerSession: 25,
+      discount: 0.15,
+      addOns: [
+        { name: "Express Delivery", price: 10 },
+        { name: "Delicate Care", price: 5 },
+      ],
+      specialOffer: "Book weekly and get 15% off!",
+    },
   },
   {
     id: "4",
-    name: "Historical City Walking Tour",
-    description: "Discover hidden gems with an expert guide.",
+    name: "Pet Grooming at Home",
+    description: "Pamper your pet with a full grooming session at home.",
     longDescription:
-      "Join our acclaimed historical walking tour and uncover the secrets of the city with a knowledgeable local guide. This 3-hour tour covers major landmarks and hidden alleyways, offering fascinating stories and insights into the city's past. Small group sizes ensure a personal experience.",
-    price: 40,
-    currency: "EUR",
-    image: "https://placehold.co/600x400.png",
-    category: "Tour Guides",
-    icon: Users,
-    dataAiHint: "city tour",
-    rating: 4.6,
-    reviews: 210,
-    popular: true,
-  },
-  {
-    id: "5",
-    name: "Global Unlimited Data SIM Card",
-    description: "Stay connected in over 100 countries.",
-    longDescription:
-      "Never worry about roaming charges again! Our global SIM card offers unlimited data in over 100 countries. Easy activation and top-up options available. Perfect for frequent travelers or multi-country trips. Supports 4G/LTE speeds where available.",
-    price: 30,
-    currency: "USD",
-    image: "https://placehold.co/600x400.png",
-    category: "SIM Cards",
-    icon: Smartphone,
-    dataAiHint: "sim card",
-    rating: 4.5,
-    reviews: 150,
-    popular: true,
-  },
-  {
-    id: "6",
-    name: "Comprehensive Travel Insurance",
-    description: "Travel with peace of mind and full coverage.",
-    longDescription:
-      "Our comprehensive travel insurance plan covers medical emergencies, trip cancellations, lost baggage, and more. Get 24/7 assistance worldwide. Simple claims process. Suitable for individuals, couples, and families. Choose the plan that best fits your travel needs.",
+      "Our certified groomers provide gentle and thorough grooming for dogs and cats. Includes bath, haircut, nail trim, and ear cleaning. Stress-free for your pet and convenient for you!",
     price: 60,
     currency: "USD",
-    image: "https://placehold.co/600x400.png",
-    category: "Travel Insurance",
-    icon: ShieldCheck,
-    dataAiHint: "travel insurance",
+    image:
+      "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=800&q=80",
+    category: "Pet Grooming",
+    icon: "paw-print",
+    dataAiHint: "pet grooming",
     rating: 4.8,
-    reviews: 95,
-    featured: true,
+    reviews: 110,
+    features: [
+      {
+        icon: "paw-print",
+        title: "Certified Groomers",
+        description: "Experienced with all breeds and temperaments.",
+      },
+      {
+        icon: "shield-check",
+        title: "Pet-Safe Products",
+        description: "Gentle, hypoallergenic shampoos and conditioners.",
+      },
+      {
+        icon: "calendar-check",
+        title: "Flexible Appointments",
+        description: "Book at your convenience, weekends included.",
+      },
+    ],
+    serviceCoverage: [
+      "Bath & dry",
+      "Haircut & styling",
+      "Nail trim",
+      "Ear cleaning",
+      "De-shedding",
+    ],
+    process: [
+      "Book your grooming session online",
+      "Groomer arrives at your home",
+      "Full grooming session",
+      "Happy, clean pet!",
+    ],
+    reviewsList: [
+      {
+        name: "James Lee",
+        date: "May 11, 2024",
+        rating: 5,
+        text: "My dog looks amazing and was so relaxed!",
+      },
+      {
+        name: "Olga Ivanova",
+        date: "May 10, 2024",
+        rating: 4,
+        text: "Very convenient and the groomer was great with my cat.",
+      },
+      {
+        name: "Ahmed Hassan",
+        date: "May 9, 2024",
+        rating: 5,
+        text: "Best grooming experience for my pet!",
+      },
+    ],
+    booking: {
+      pricePerSession: 60,
+      discount: 0.1,
+      addOns: [
+        { name: "De-shedding Treatment", price: 15 },
+        { name: "Flea & Tick Bath", price: 12 },
+      ],
+      specialOffer: "Book for 2+ pets and get 10% off!",
+    },
   },
 ];
 

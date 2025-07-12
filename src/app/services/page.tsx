@@ -68,8 +68,8 @@ export default async function ServicesPage({
   return (
     <MainLayout>
       <PageHeader
-        title="Our Travel Services"
-        description="Explore a wide range of services to make your travel unforgettable. From airport transfers to exciting activity tickets, we have you covered."
+        title="Book Daily Services Online"
+        description="Discover and book top-rated cleaning, haircut, laundry, pet grooming, and more. Enjoy professional, convenient, and affordable services at your doorstep."
       />
 
       <div className="mb-8 p-6 bg-card rounded-lg shadow-md">
@@ -78,7 +78,7 @@ export default async function ServicesPage({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search services (e.g., Eiffel Tower, Airport Transfer)"
+              placeholder="Search services (e.g., cleaning, haircut, laundry)"
               className="pl-10 w-full"
               defaultValue={searchTerm}
               // onChange={(e) => router.push(`/services?search=${e.target.value}`)} // Needs client component for this
@@ -104,12 +104,6 @@ export default async function ServicesPage({
       <section className="mb-10">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl md:text-2xl font-bold">Featured Services</h2>
-          <Link
-            href="/services?section=featured"
-            className="text-primary text-sm font-medium hover:underline"
-          >
-            See All
-          </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {featuredServices.map((service) => (
@@ -118,37 +112,13 @@ export default async function ServicesPage({
         </div>
       </section>
 
-      {/* Weekly Deals */}
+      {/* All Services */}
       <section className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl md:text-2xl font-bold">Weekly Deals</h2>
-          <Link
-            href="/services?section=weekly"
-            className="text-primary text-sm font-medium hover:underline"
-          >
-            See All
-          </Link>
+          <h2 className="text-xl md:text-2xl font-bold">All Services</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {weeklyDeals.map((service) => (
-            <ServiceCard key={service.id} service={service} />
-          ))}
-        </div>
-      </section>
-
-      {/* Popular Services */}
-      <section className="mb-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl md:text-2xl font-bold">Popular Services</h2>
-          <Link
-            href="/services?section=popular"
-            className="text-primary text-sm font-medium hover:underline"
-          >
-            See All
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {popularServices.map((service) => (
+          {filteredServices.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
         </div>
